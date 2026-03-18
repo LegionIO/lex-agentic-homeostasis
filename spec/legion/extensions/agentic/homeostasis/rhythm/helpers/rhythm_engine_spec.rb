@@ -56,6 +56,33 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Rhythm::Helpers::Rhythm
       r2 = add_alertness_rhythm
       expect(r1.id).not_to eq(r2.id)
     end
+
+    it 'rejects invalid rhythm_type' do
+      result = engine.add_rhythm(name: 'bad', rhythm_type: :nonexistent, dimension: :focus, amplitude: 0.5)
+      expect(result).to be_nil
+    end
+
+    it 'accepts all RHYTHM_TYPES' do
+      constants = Legion::Extensions::Agentic::Homeostasis::Rhythm::Helpers::Constants::RHYTHM_TYPES
+      constants.each do |rt|
+        period = rt == :custom ? 1000 : nil
+        result = engine.add_rhythm(name: "r_#{rt}", rhythm_type: rt, dimension: :focus, period: period)
+        expect(result).not_to be_nil, "Expected rhythm_type #{rt.inspect} to be accepted"
+      end
+    end
+
+    it 'rejects invalid dimension' do
+      result = engine.add_rhythm(name: 'bad', rhythm_type: :ultradian, dimension: :nonexistent, amplitude: 0.5)
+      expect(result).to be_nil
+    end
+
+    it 'accepts all COGNITIVE_DIMENSIONS' do
+      constants = Legion::Extensions::Agentic::Homeostasis::Rhythm::Helpers::Constants::COGNITIVE_DIMENSIONS
+      constants.each do |dim|
+        result = engine.add_rhythm(name: "r_#{dim}", rhythm_type: :ultradian, dimension: dim)
+        expect(result).not_to be_nil, "Expected dimension #{dim.inspect} to be accepted"
+      end
+    end
   end
 
   describe '#remove_rhythm' do

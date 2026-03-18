@@ -16,6 +16,8 @@ module Legion
               end
 
               def add_rhythm(name:, rhythm_type:, dimension:, period: nil, amplitude: 0.5, phase_offset: 0.0)
+                return nil unless RHYTHM_TYPES.include?(rhythm_type.to_sym)
+                return nil unless COGNITIVE_DIMENSIONS.include?(dimension.to_sym)
                 return nil if @rhythms.size >= MAX_RHYTHMS
 
                 resolved_period = resolve_period(rhythm_type, period)

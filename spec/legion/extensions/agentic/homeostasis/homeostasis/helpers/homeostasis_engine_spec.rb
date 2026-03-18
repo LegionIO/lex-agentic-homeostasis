@@ -14,6 +14,18 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Homeostasis::Helpers::H
       expect(var.category).to eq(:cognitive_load)
       expect(var.setpoint).to eq(0.3)
     end
+
+    it 'rejects invalid category' do
+      expect(engine.create_variable(name: 'bad', category: :nonexistent_category)).to be_nil
+    end
+
+    it 'accepts all VARIABLE_CATEGORIES' do
+      constants = Legion::Extensions::Agentic::Homeostasis::Homeostasis::Helpers::Constants::VARIABLE_CATEGORIES
+      constants.each do |cat|
+        var = engine.create_variable(name: "var_#{cat}", category: cat)
+        expect(var).not_to be_nil, "Expected category #{cat.inspect} to be accepted"
+      end
+    end
   end
 
   describe '#perturb' do

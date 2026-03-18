@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-03-18
+
+### Changed
+- Enforce VARIABLE_CATEGORIES validation in HomeostasisEngine#create_variable (returns nil for invalid category)
+- Add :general to VARIABLE_CATEGORIES to support default category value
+- Enforce RHYTHM_TYPES validation in RhythmEngine#add_rhythm (returns nil for invalid rhythm_type)
+- Enforce COGNITIVE_DIMENSIONS validation in RhythmEngine#add_rhythm (returns nil for invalid dimension)
+
 ## [0.1.1] - 2026-03-18
 
 ### Changed

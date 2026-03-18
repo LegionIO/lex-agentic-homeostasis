@@ -32,7 +32,7 @@ module Legion
               }.freeze
 
               VARIABLE_CATEGORIES = %i[
-                arousal attention cognitive_load emotional_valence
+                general arousal attention cognitive_load emotional_valence
                 confidence curiosity fatigue motivation
                 social_engagement uncertainty
               ].freeze

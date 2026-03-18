@@ -16,6 +16,8 @@ module Legion
               def create_variable(name:, category: :general, setpoint: DEFAULT_SETPOINT,
                                   tolerance: DEFAULT_TOLERANCE, correction_rate: CORRECTION_RATE,
                                   initial_value: nil)
+                return nil unless VARIABLE_CATEGORIES.include?(category.to_sym)
+
                 prune_if_needed
                 variable = CognitiveVariable.new(
                   name:            name,
