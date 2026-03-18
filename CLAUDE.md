@@ -7,7 +7,7 @@
 Domain consolidation gem for homeostasis, self-regulation, and internal state maintenance. Bundles 20 source extensions into one loadable unit under `Legion::Extensions::Agentic::Homeostasis`.
 
 **Gem**: `lex-agentic-homeostasis`
-**Version**: 0.1.0
+**Version**: 0.1.1
 **Namespace**: `Legion::Extensions::Agentic::Homeostasis`
 
 ## Sub-Modules
@@ -44,6 +44,6 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 
 ```bash
 bundle install
-bundle exec rspec        # 2269 examples, 0 failures
+bundle exec rspec        # 2271 examples, 0 failures
 bundle exec rubocop      # 0 offenses
 ```

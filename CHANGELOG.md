@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-03-18
+
+### Changed
+- Enforce COCOON_TYPES validation in Incubator#create_cocoon (returns nil for invalid type)
+
 ## [0.1.0] - 2026-03-18
 
 ### Added

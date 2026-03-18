@@ -38,6 +38,18 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Cocoon::Helpers::Incuba
       c2 = incubator.create_cocoon(cocoon_type: :pod,  domain: :emotional)
       expect(c1.id).not_to eq(c2.id)
     end
+
+    it 'rejects invalid cocoon_type' do
+      expect(incubator.create_cocoon(cocoon_type: :concrete, domain: :cognitive)).to be_nil
+    end
+
+    it 'accepts all valid COCOON_TYPES' do
+      constants = Legion::Extensions::Agentic::Homeostasis::Cocoon::Helpers::Constants
+      constants::COCOON_TYPES.each do |ct|
+        result = incubator.create_cocoon(cocoon_type: ct, domain: :cognitive)
+        expect(result).not_to be_nil
+      end
+    end
   end
 
   describe '#gestate_all!' do

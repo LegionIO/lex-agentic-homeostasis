@@ -4,7 +4,7 @@ module Legion
   module Extensions
     module Agentic
       module Homeostasis
-        VERSION = '0.1.0'
+        VERSION = '0.1.1'
       end
     end
   end

@@ -14,6 +14,8 @@ module Legion
               end
 
               def create_cocoon(cocoon_type:, domain:, content: '', maturity: nil, protection: nil)
+                return nil unless COCOON_TYPES.include?(cocoon_type.to_sym)
+
                 prune_cocoons
                 cocoon = Cocoon.new(
                   cocoon_type: cocoon_type,
