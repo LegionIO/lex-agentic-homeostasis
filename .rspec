@@ -1,0 +1,3 @@
+--require spec_helper
+--format documentation
+--exclude-pattern '**/local_persistence_spec.rb'
