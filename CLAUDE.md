@@ -26,7 +26,7 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 | `Homeostasis::Cocoon` | `lex-cognitive-cocoon` | Protective withdrawal and recovery state |
 | `Homeostasis::FossilFuel` | `lex-cognitive-fossil-fuel` | Stored energy from past experience |
 | `Homeostasis::Hourglass` | `lex-cognitive-hourglass` | Time-based resource depletion tracking |
-| `Homeostasis::Core` | `lex-privatecore` | PII stripping, probe detection, cryptographic erasure with audit log |
+| `Homeostasis::Core` | `lex-homeostasis` | Core homeostasis regulation engine — seven setpoints, allostatic load, negative feedback regulator |
 | `Homeostasis::Neuromodulation` | `lex-neuromodulation` | Dopamine/serotonin/norepinephrine/acetylcholine analogs |
 | `Homeostasis::NeuralOscillation` | `lex-neural-oscillation` | Gamma/beta/alpha/theta/delta bands, cross-frequency coupling |
 | `Homeostasis::Temporal` | `lex-temporal` | Temporal reasoning — event ordering, duration estimation |
@@ -37,8 +37,12 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 
 ## Actors
 
+- `Homeostasis::NeuralOscillation::Actors::Tick` — interval actor, advances oscillation bands
+- `Homeostasis::Neuromodulation::Actors::Drift` — interval actor, applies neuromodulator drift
+- `Homeostasis::Surplus::Actors::Replenish` — interval actor, replenishes cognitive surplus
+- `Homeostasis::Tectonics::Actors::DriftTick` — interval actor, advances tectonic drift
+- `Homeostasis::Tempo::Actors::Adapt` — interval actor, adapts processing tempo
 - `Homeostasis::Tide::Actors::TideCycle` — runs every 60s, executes `tide_maintenance`
-- `Homeostasis::Core::Actors::AuditPrune` — runs every 3600s, prunes audit log
 
 ## Development
 
