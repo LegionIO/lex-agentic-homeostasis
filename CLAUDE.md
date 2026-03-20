@@ -17,7 +17,7 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 | `Homeostasis::Homeostasis` | `lex-homeostasis` | Seven-setpoint negative feedback regulation, allostatic load |
 | `Homeostasis::FatigueModel` | `lex-cognitive-fatigue-model` | Cognitive resource depletion curves across session time |
 | `Homeostasis::Metabolism` | `lex-cognitive-metabolism` | Energy budget allocation and cognitive metabolic rate |
-| `Homeostasis::Rhythm` | `lex-cognitive-tide` | Circadian-like cognitive rhythm — sinusoidal oscillators, peak/low tide |
+| `Homeostasis::Rhythm` | `lex-cognitive-rhythm` | Circadian-like cognitive rhythm — sinusoidal oscillators, peak/low tide |
 | `Homeostasis::Tempo` | `lex-cognitive-tempo` | Processing speed modulation |
 | `Homeostasis::Tide` | `lex-cognitive-tide` | Tidal pool maintenance — periodic tide cycle |
 | `Homeostasis::Weathering` | `lex-cognitive-weathering` | Gradual wear on cognitive structures |
@@ -48,6 +48,6 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 
 ```bash
 bundle install
-bundle exec rspec        # 2277 examples, 0 failures
+bundle exec rspec        # 2270 examples, 0 failures
 bundle exec rubocop      # 0 offenses
 ```
