@@ -1,41 +1,39 @@
 # frozen_string_literal: true
 
 require 'bundler/setup'
+require 'legion/logging'
+require 'legion/settings'
+require 'legion/cache/helper'
+require 'legion/crypt/helper'
+require 'legion/data/helper'
+require 'legion/json/helper'
+require 'legion/transport'
 
 module Legion
-  module Logging
-    def self.debug(_msg); end
-    def self.info(_msg); end
-    def self.warn(_msg); end
-    def self.error(_msg); end
-    def self.fatal(_msg); end
-  end
-
   module Extensions
-    module Core
-      def self.extended(_base); end
-    end
-
     module Helpers
       module Lex
-        def self.included(_base); end
+        include Legion::Logging::Helper
+        include Legion::Settings::Helper
+        include Legion::Cache::Helper
+        include Legion::Crypt::Helper
+        include Legion::Data::Helper
+        include Legion::JSON::Helper
+        include Legion::Transport::Helper
+      end
+    end
+
+    module Actors
+      class Every
+        include Helpers::Lex
+      end
+
+      class Once
+        include Helpers::Lex
       end
     end
   end
 end
-
-# rubocop:disable Lint/EmptyClass, Style/OneClassPerFile
-module Legion
-  module Extensions
-    module Actors
-      class Every; end
-      class Once; end
-    end
-  end
-end
-$LOADED_FEATURES << 'legion/extensions/actors/every'
-$LOADED_FEATURES << 'legion/extensions/actors/once'
-# rubocop:enable Lint/EmptyClass, Style/OneClassPerFile
 
 require 'legion/extensions/agentic/homeostasis'
 
