@@ -22,7 +22,7 @@ module Legion
                 [(0.6...0.8),  :healthy],
                 [(0.4...0.6),  :moderate],
                 [(0.2...0.4),  :scarce],
-                [(..0.2),      :critical]
+                [..0.2,        :critical]
               ].freeze
 
               ENERGY_LABELS = [
@@ -30,7 +30,7 @@ module Legion
                 [(0.6...0.8),  :powerful],
                 [(0.4...0.6),  :steady],
                 [(0.2...0.4),  :weak],
-                [(..0.2),      :exhausted]
+                [..0.2,        :exhausted]
               ].freeze
 
               def self.label_for(table, value)
