@@ -1,6 +1,9 @@
 # Changelog
 
-## [Unreleased]
+## [0.1.4] - 2026-03-26
+
+### Changed
+- fix remote_invocable? to use class method for local dispatch
 
 ## [0.1.3] - 2026-03-22
 
