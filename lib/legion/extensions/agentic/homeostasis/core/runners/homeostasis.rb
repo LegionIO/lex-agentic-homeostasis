@@ -7,8 +7,8 @@ module Legion
         module Core
           module Runners
             module Homeostasis
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def regulate(tick_results: {}, **)
                 observations = extract_observations(tick_results)
@@ -18,9 +18,9 @@ module Legion
                 # Adapt setpoints slowly when system is stable
                 regulator.adapt_setpoints if allostatic_load.classification == :healthy
 
-                Legion::Logging.debug "[homeostasis] regulated #{signals.size} subsystems, " \
-                                      "health=#{regulator.regulation_health.round(2)}, " \
-                                      "allostatic=#{allostatic_load.load.round(2)}"
+                log.debug("[homeostasis] regulated #{signals.size} subsystems, " \
+                          "health=#{regulator.regulation_health.round(2)}, " \
+                          "allostatic=#{allostatic_load.load.round(2)}")
 
                 {
                   signals:              signals,
@@ -38,7 +38,7 @@ module Legion
                 signal = regulator.signals[sym]
                 sp_status = regulator.subsystem_status(sym)
 
-                Legion::Logging.debug "[homeostasis] modulation query: #{sym} -> #{signal&.dig(:type) || :unknown}"
+                log.debug("[homeostasis] modulation query: #{sym} -> #{signal&.dig(:type) || :unknown}")
 
                 {
                   subsystem:       sym,
@@ -49,7 +49,7 @@ module Legion
               end
 
               def allostatic_status(**)
-                Legion::Logging.debug "[homeostasis] allostatic load=#{allostatic_load.load.round(2)} (#{allostatic_load.classification})"
+                log.debug("[homeostasis] allostatic load=#{allostatic_load.load.round(2)} (#{allostatic_load.classification})")
 
                 allostatic_load.to_h
               end
@@ -75,7 +75,7 @@ module Legion
                   allostatic_peak:      allostatic_load.peak_load,
                   allostatic_trend:     allostatic_load.trend,
                   subsystems_tracked:   regulator.setpoints.size,
-                  subsystems_deviating: regulator.setpoints.values.reject(&:within_tolerance?).size,
+                  subsystems_deviating: regulator.setpoints.values.count { |element| !element.within_tolerance? },
                   worst_deviation:      regulator.worst_deviation
                 }
               end

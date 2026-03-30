@@ -7,8 +7,8 @@ module Legion
         module Weathering
           module Runners
             module CognitiveWeathering
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def apply_stressor(description:, stressor_type: :cognitive_overload, intensity: 0.5,
                                  duration: 3600, domain: nil, **)
@@ -21,29 +21,29 @@ module Legion
                 )
 
                 result = weathering_engine.apply_stressor(stressor)
-                Legion::Logging.debug "[cognitive_weathering] stressor applied: type=#{stressor_type} " \
-                                      "intensity=#{intensity} impact=#{stressor.cumulative_impact.round(4)} " \
-                                      "integrity=#{result[:integrity].round(4)} fragile=#{result[:fragile]}"
+                log.debug("[cognitive_weathering] stressor applied: type=#{stressor_type} " \
+                          "intensity=#{intensity} impact=#{stressor.cumulative_impact.round(4)} " \
+                          "integrity=#{result[:integrity].round(4)} fragile=#{result[:fragile]}")
                 result.merge(stressor: stressor.to_h)
               end
 
               def recover(amount: 1.0, **)
                 result = weathering_engine.recover!(amount)
-                Legion::Logging.debug "[cognitive_weathering] recovery: amount=#{amount} integrity=#{result[:integrity].round(4)}"
+                log.debug("[cognitive_weathering] recovery: amount=#{amount} integrity=#{result[:integrity].round(4)}")
                 result
               end
 
               def rest(amount: 1.0, **)
                 result = weathering_engine.rest!(amount)
-                Legion::Logging.debug "[cognitive_weathering] rest: amount=#{amount} integrity=#{result[:integrity].round(4)}"
+                log.debug("[cognitive_weathering] rest: amount=#{amount} integrity=#{result[:integrity].round(4)}")
                 result
               end
 
               def weathering_report(**)
                 report = weathering_engine.weathering_report
-                Legion::Logging.debug "[cognitive_weathering] report: integrity=#{report[:integrity_label]} " \
-                                      "capacity=#{report[:effective_capacity].round(4)} " \
-                                      "stressors=#{report[:stressor_count]}"
+                log.debug("[cognitive_weathering] report: integrity=#{report[:integrity_label]} " \
+                          "capacity=#{report[:effective_capacity].round(4)} " \
+                          "stressors=#{report[:stressor_count]}")
                 report
               end
 

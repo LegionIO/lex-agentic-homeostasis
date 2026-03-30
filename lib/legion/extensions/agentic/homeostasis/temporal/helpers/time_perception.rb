@@ -95,7 +95,7 @@ module Legion
               end
 
               def overall_urgency
-                urgencies = @deadlines.keys.map { |id| deadline_urgency(id) }.compact
+                urgencies = @deadlines.keys.filter_map { |id| deadline_urgency(id) }
                 return :none if urgencies.empty?
 
                 priority = Constants::URGENCY_LEVELS
