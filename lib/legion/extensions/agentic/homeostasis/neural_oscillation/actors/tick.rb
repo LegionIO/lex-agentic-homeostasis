@@ -5,7 +5,7 @@ module Legion
     module Agentic
       module Homeostasis
         module NeuralOscillation
-          module Actors
+          module Actor
             class Tick < Legion::Extensions::Actors::Every
               def time
                 5

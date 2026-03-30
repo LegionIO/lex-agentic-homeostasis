@@ -112,7 +112,7 @@ module Legion
                   avg_impurity:   avg_impurity,
                   refined_purity: refined_purity,
                   domain:         ores.map(&:domain).tally.max_by { |_, n| n }&.first,
-                  content:        ores.map(&:content).compact.join(' + ')
+                  content:        ores.filter_map(&:content).join(' + ')
                 }
               end
 

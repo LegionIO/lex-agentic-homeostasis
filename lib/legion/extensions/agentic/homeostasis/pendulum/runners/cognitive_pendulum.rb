@@ -7,8 +7,8 @@ module Legion
         module Pendulum
           module Runners
             module CognitivePendulum
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def create_pendulum(pole_pair:, amplitude: 0.5, period: 10.0, damping: Helpers::Constants::DAMPING_RATE, **)
                 unless Helpers::Constants.valid_pole_pair?(pole_pair)
@@ -29,7 +29,7 @@ module Legion
                   damping:   damping
                 )
 
-                Legion::Logging.debug "[cognitive_pendulum] created pole_pair=#{pole_pair} id=#{pendulum.id[0..7]}"
+                log.debug("[cognitive_pendulum] created pole_pair=#{pole_pair} id=#{pendulum.id[0..7]}")
                 { success: true, pendulum_id: pendulum.id, pole_pair: pole_pair, amplitude: pendulum.amplitude }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -38,11 +38,11 @@ module Legion
               def swing(pendulum_id:, force: 0.0, **)
                 result = pendulum_engine.swing(pendulum_id, force: force)
                 unless result
-                  Legion::Logging.debug "[cognitive_pendulum] swing failed: #{pendulum_id[0..7]} not found"
+                  log.debug("[cognitive_pendulum] swing failed: #{pendulum_id[0..7]} not found")
                   return { success: false, error: :not_found }
                 end
 
-                Legion::Logging.debug "[cognitive_pendulum] swing id=#{pendulum_id[0..7]} position=#{result.current_position.round(4)}"
+                log.debug("[cognitive_pendulum] swing id=#{pendulum_id[0..7]} position=#{result.current_position.round(4)}")
                 { success: true, pendulum_id: pendulum_id, current_position: result.current_position, dominant_pole: result.dominant_pole }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -51,7 +51,7 @@ module Legion
               def damp_all(**)
                 pendulum_engine.damp_all!
                 count = pendulum_engine.count
-                Legion::Logging.debug "[cognitive_pendulum] damped all (#{count} pendulums)"
+                log.debug("[cognitive_pendulum] damped all (#{count} pendulums)")
                 { success: true, damped: count }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -61,7 +61,7 @@ module Legion
                 return { success: false, error: :invalid_frequency, message: 'frequency must be positive' } unless frequency.to_f.positive?
 
                 resonant_ids = pendulum_engine.check_resonance(frequency.to_f)
-                Legion::Logging.debug "[cognitive_pendulum] resonance check frequency=#{frequency} matches=#{resonant_ids.size}"
+                log.debug("[cognitive_pendulum] resonance check frequency=#{frequency} matches=#{resonant_ids.size}")
                 { success: true, frequency: frequency, resonant_pendulum_ids: resonant_ids, count: resonant_ids.size }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -70,11 +70,11 @@ module Legion
               def get_dominant_pole(pendulum_id:, **)
                 pole = pendulum_engine.dominant_pole(pendulum_id)
                 if pole.nil?
-                  Legion::Logging.debug "[cognitive_pendulum] dominant_pole failed: #{pendulum_id[0..7]} not found"
+                  log.debug("[cognitive_pendulum] dominant_pole failed: #{pendulum_id[0..7]} not found")
                   return { success: false, error: :not_found }
                 end
 
-                Legion::Logging.debug "[cognitive_pendulum] dominant_pole id=#{pendulum_id[0..7]} pole=#{pole}"
+                log.debug("[cognitive_pendulum] dominant_pole id=#{pendulum_id[0..7]} pole=#{pole}")
                 { success: true, pendulum_id: pendulum_id, dominant_pole: pole }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -82,7 +82,7 @@ module Legion
 
               def most_active(limit: 5, **)
                 pendulums = pendulum_engine.most_active(limit: limit)
-                Legion::Logging.debug "[cognitive_pendulum] most_active limit=#{limit} found=#{pendulums.size}"
+                log.debug("[cognitive_pendulum] most_active limit=#{limit} found=#{pendulums.size}")
                 { success: true, pendulums: pendulums.map(&:to_h), count: pendulums.size }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -90,7 +90,7 @@ module Legion
 
               def most_damped(limit: 5, **)
                 pendulums = pendulum_engine.most_damped(limit: limit)
-                Legion::Logging.debug "[cognitive_pendulum] most_damped limit=#{limit} found=#{pendulums.size}"
+                log.debug("[cognitive_pendulum] most_damped limit=#{limit} found=#{pendulums.size}")
                 { success: true, pendulums: pendulums.map(&:to_h), count: pendulums.size }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }
@@ -98,7 +98,7 @@ module Legion
 
               def pendulum_report(**)
                 report = pendulum_engine.pendulum_report
-                Legion::Logging.debug "[cognitive_pendulum] report total=#{report[:total]}"
+                log.debug("[cognitive_pendulum] report total=#{report[:total]}")
                 { success: true, report: report }
               rescue ArgumentError => e
                 { success: false, error: :argument_error, message: e.message }

@@ -96,7 +96,7 @@ module Legion
               def coefficient_of_variation
                 return Float::INFINITY if @intervals.empty? || @mean_interval.nil? || @mean_interval.zero?
 
-                std_dev = Math.sqrt(@intervals.map { |i| (i - @mean_interval)**2 }.sum / @intervals.size.to_f)
+                std_dev = Math.sqrt(@intervals.sum { |i| (i - @mean_interval)**2 } / @intervals.size.to_f)
                 std_dev / @mean_interval
               end
 

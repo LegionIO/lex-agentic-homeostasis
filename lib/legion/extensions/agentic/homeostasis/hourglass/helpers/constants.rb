@@ -35,7 +35,7 @@ module Legion
 
               def self.label_for(table, value)
                 clamped = value.clamp(0.0, 1.0)
-                entry = const_get(table).find { |e| e[:range].cover?(clamped) }
+                entry = const_get(table, false).find { |e| e[:range].cover?(clamped) }
                 entry ? entry[:label] : 'unknown'
               end
             end

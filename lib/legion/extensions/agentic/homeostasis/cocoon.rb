@@ -20,4 +20,4 @@ module Legion
   end
 end
 
-Legion::Extensions.extend(Legion::Extensions::Core) if Legion::Extensions.const_defined?(:Core)
+Legion::Extensions.extend(Legion::Extensions::Core) if Legion::Extensions.const_defined?(:Core, false)

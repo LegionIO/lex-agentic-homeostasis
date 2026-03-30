@@ -87,7 +87,7 @@ module Legion
               end
 
               def synchronize(rhythm_ids:)
-                rhythms = rhythm_ids.map { |id| @rhythms[id] }.compact
+                rhythms = rhythm_ids.filter_map { |id| @rhythms[id] }
                 return { success: false, reason: :not_found } if rhythms.empty?
 
                 reference_phase = rhythms.first.current_phase

@@ -9,8 +9,8 @@ module Legion
             module CognitiveFurnace
               extend self
 
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def add_ore(ore_type: nil, domain: nil, content: nil, purity: 0.5, impurity: nil, engine: nil, **)
                 return { success: false, reason: :missing_ore_type } unless ore_type
@@ -29,7 +29,7 @@ module Legion
                   impurity: impurity&.to_f
                 )
 
-                log_debug "[furnace] add_ore: type=#{ore_type} domain=#{domain} added=#{result[:added]}"
+                log.debug("[furnace] add_ore: type=#{ore_type} domain=#{domain} added=#{result[:added]}")
                 result[:added] ? { success: true }.merge(result) : { success: false }.merge(result)
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -41,7 +41,7 @@ module Legion
                   temperature: temperature.to_f
                 )
 
-                log_debug "[furnace] create_crucible: capacity=#{capacity} created=#{result[:created]}"
+                log.debug("[furnace] create_crucible: capacity=#{capacity} created=#{result[:created]}")
                 result[:created] ? { success: true }.merge(result) : { success: false }.merge(result)
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -52,7 +52,7 @@ module Legion
                 return { success: false, reason: :missing_crucible_id } unless crucible_id
 
                 result = furnace(engine).load_ore(ore_id: ore_id, crucible_id: crucible_id)
-                log_debug "[furnace] load_ore: ore=#{ore_id[0..7]} crucible=#{crucible_id[0..7]} loaded=#{result[:loaded]}"
+                log.debug("[furnace] load_ore: ore=#{ore_id[0..7]} crucible=#{crucible_id[0..7]} loaded=#{result[:loaded]}")
                 result[:loaded] ? { success: true }.merge(result) : { success: false }.merge(result)
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -62,7 +62,7 @@ module Legion
                 return { success: false, reason: :missing_crucible_id } unless crucible_id
 
                 result = furnace(engine).heat_crucible(crucible_id: crucible_id, rate: rate.to_f)
-                log_debug "[furnace] heat: crucible=#{crucible_id[0..7]} after=#{result[:after]} label=#{result[:label]}"
+                log.debug("[furnace] heat: crucible=#{crucible_id[0..7]} after=#{result[:after]} label=#{result[:label]}")
                 result[:heated] ? { success: true }.merge(result) : { success: false }.merge(result)
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -77,7 +77,7 @@ module Legion
                 end
 
                 result = furnace(engine).smelt(crucible_id: crucible_id, alloy_type: alloy_sym)
-                log_debug "[furnace] smelt: crucible=#{crucible_id[0..7]} smelted=#{result[:smelted]}"
+                log.debug("[furnace] smelt: crucible=#{crucible_id[0..7]} smelted=#{result[:smelted]}")
                 result[:smelted] ? { success: true }.merge(result) : { success: false }.merge(result)
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -86,7 +86,7 @@ module Legion
               def list_ores(limit: 50, engine: nil, **)
                 fe = furnace(engine)
                 ores = fe.ores.values.first(limit.to_i).map(&:to_h)
-                log_debug "[furnace] list_ores: count=#{ores.size}"
+                log.debug("[furnace] list_ores: count=#{ores.size}")
                 { success: true, ores: ores, total: fe.ores.size }
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -94,7 +94,7 @@ module Legion
 
               def furnace_status(engine: nil, **)
                 report = furnace(engine).furnace_report
-                log_debug "[furnace] status: ores=#{report[:ore_count]} crucibles=#{report[:crucible_count]} alloys=#{report[:alloy_count]}"
+                log.debug("[furnace] status: ores=#{report[:ore_count]} crucibles=#{report[:crucible_count]} alloys=#{report[:alloy_count]}")
                 { success: true, report: report }
               rescue ArgumentError => e
                 { success: false, reason: :argument_error, message: e.message }
@@ -109,7 +109,7 @@ module Legion
               end
 
               def log_debug(msg)
-                Legion::Logging.debug(msg) if defined?(Legion::Logging)
+                log.debug(msg)
               end
             end
           end

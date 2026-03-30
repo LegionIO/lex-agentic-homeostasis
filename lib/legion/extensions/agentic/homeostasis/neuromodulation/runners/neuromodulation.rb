@@ -7,15 +7,15 @@ module Legion
         module Neuromodulation
           module Runners
             module Neuromodulation
-              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers) &&
-                                                          Legion::Extensions::Helpers.const_defined?(:Lex)
+              include Legion::Extensions::Helpers::Lex if Legion::Extensions.const_defined?(:Helpers, false) &&
+                                                          Legion::Extensions::Helpers.const_defined?(:Lex, false)
 
               def boost_modulator(name:, amount:, reason: nil, **)
                 mod_name = name.to_sym
                 return { success: false, error: "Unknown modulator: #{name}" } unless Helpers::Constants::MODULATORS.include?(mod_name)
 
                 new_level = neuromod_system.boost(mod_name, amount.to_f, reason: reason)
-                Legion::Logging.debug "[neuromodulation] boost #{mod_name} by #{amount} -> #{new_level.round(4)}"
+                log.debug("[neuromodulation] boost #{mod_name} by #{amount} -> #{new_level.round(4)}")
                 {
                   success:   true,
                   modulator: mod_name,
@@ -29,7 +29,7 @@ module Legion
                 return { success: false, error: "Unknown modulator: #{name}" } unless Helpers::Constants::MODULATORS.include?(mod_name)
 
                 new_level = neuromod_system.suppress(mod_name, amount.to_f, reason: reason)
-                Legion::Logging.debug "[neuromodulation] suppress #{mod_name} by #{amount} -> #{new_level.round(4)}"
+                log.debug("[neuromodulation] suppress #{mod_name} by #{amount} -> #{new_level.round(4)}")
                 {
                   success:   true,
                   modulator: mod_name,
@@ -53,13 +53,13 @@ module Legion
 
               def all_modulator_levels(**)
                 levels = neuromod_system.all_levels
-                Legion::Logging.debug "[neuromodulation] all levels: #{levels.map { |k, v| "#{k}=#{v.round(3)}" }.join(' ')}"
+                log.debug("[neuromodulation] all levels: #{levels.map { |k, v| "#{k}=#{v.round(3)}" }.join(' ')}")
                 { success: true, levels: levels.transform_values { |v| v.round(4) } }
               end
 
               def cognitive_influence(**)
                 influences = neuromod_system.composite_influences
-                Legion::Logging.debug '[neuromodulation] cognitive influence snapshot'
+                log.debug('[neuromodulation] cognitive influence snapshot')
                 { success: true, influences: influences }
               end
 
@@ -89,7 +89,7 @@ module Legion
                          else
                            :imbalanced
                          end
-                Legion::Logging.debug "[neuromodulation] system balance: #{score.round(2)} status=#{status}"
+                log.debug("[neuromodulation] system balance: #{score.round(2)} status=#{status}")
                 {
                   success: true,
                   score:   score.round(4),
@@ -114,7 +114,7 @@ module Legion
               def update_neuromodulation(**)
                 neuromod_system.tick
                 levels = neuromod_system.all_levels
-                Legion::Logging.debug '[neuromodulation] drift tick completed'
+                log.debug('[neuromodulation] drift tick completed')
                 {
                   success: true,
                   action:  :drift_tick,
