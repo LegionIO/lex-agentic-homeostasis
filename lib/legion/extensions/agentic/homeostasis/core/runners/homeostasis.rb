@@ -152,9 +152,14 @@ module Legion
                 attention = tick_results[:sensory_processing]
                 return nil unless attention.is_a?(Hash)
 
-                return unless attention[:total_signals].is_a?(Numeric) && attention[:total_signals].positive?
+                spotlight   = attention[:spotlight].to_f
+                peripheral  = attention[:peripheral].to_f
+                background  = attention[:background].to_f
+                dropped     = attention[:dropped].to_f
+                total       = spotlight + peripheral + background + dropped
+                return nil unless total.positive?
 
-                (attention[:passed] || attention[:accepted] || 0).to_f / attention[:total_signals]
+                ((spotlight + peripheral) / total).clamp(0.0, 1.0)
               end
             end
           end

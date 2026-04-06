@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.6] - 2026-04-06
+
+### Fixed
+- fix extract_attention to read correct filter_signals output keys for attention breadth calculation
+
 ## [0.1.5] - 2026-03-30
 
 ### Changed
