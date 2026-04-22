@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8] - 2026-04-22
+### Fixed
+- Tempo Adapt actor now calls `run_tempo_adaptation` instead of read-only `tempo_report`
+- CognitiveFatigueModel only rests depleted channels (below REST_THRESHOLD) instead of all channels
+### Added
+- HomeostasisCore regulate actor (30s) — the cross-extension allostatic regulation cycle now fires autonomously
+- CognitiveHomeostasis correct actor (30s), FatigueModel update actor (60s), Metabolism cycle actor (120s)
+
 ## [0.1.7] - 2026-04-15
 ### Changed
 - Set `mcp_tools?`, `mcp_tools_deferred?`, and `transport_required?` to `false` — internal cognitive pipeline extension
