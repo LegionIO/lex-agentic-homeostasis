@@ -119,15 +119,26 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::FatigueModel::Runners::
 
   describe '#update_cognitive_fatigue_model' do
     before do
-      Legion::Extensions::Agentic::Homeostasis::FatigueModel::Helpers::Constants::CHANNELS.each do |ch|
-        2.times { client.process_cognitive_task(channel_name: ch) }
-      end
+      # Deplete decision_making past REST_THRESHOLD (0.3) — needs 12+ tasks at 0.06/task
+      13.times { client.process_cognitive_task(channel_name: :decision_making) }
     end
 
-    it 'rests all channels and returns stats' do
+    it 'rests depleted channels and returns stats' do
       before_fatigue = client.overall_fatigue_report[:overall_fatigue]
       result = client.update_cognitive_fatigue_model
       expect(result[:overall_fatigue]).to be > before_fatigue
+    end
+
+    it 'returns rested count and channels keys' do
+      result = client.update_cognitive_fatigue_model
+      expect(result).to have_key(:rested)
+      expect(result).to have_key(:channels)
+      expect(result[:rested]).to be >= 1
+    end
+
+    it 'only rests channels below REST_THRESHOLD' do
+      result = client.update_cognitive_fatigue_model
+      expect(result[:rested]).to be < Legion::Extensions::Agentic::Homeostasis::FatigueModel::Helpers::Constants::CHANNELS.size
     end
   end
 

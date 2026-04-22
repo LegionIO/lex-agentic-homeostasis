@@ -76,6 +76,23 @@ module Legion
                 report
               end
 
+              def run_tempo_adaptation(**)
+                mismatched = tempo_engine.domains_mismatched
+                adapted = mismatched.filter_map do |domain|
+                  latest = tempo_engine.records[domain]&.last
+                  next unless latest
+
+                  record = tempo_engine.adapt_tempo(domain: domain, target: latest.baseline_tempo)
+                  record&.to_h
+                end
+
+                log.info("[cognitive_tempo] adaptation cycle: #{adapted.size}/#{mismatched.size} domains adapted")
+                { adapted: adapted.size, domains: mismatched.size, results: adapted }
+              rescue StandardError => e
+                log.error("[cognitive_tempo] run_tempo_adaptation failed: #{e.message}")
+                { adapted: 0, domains: 0, error: e.message }
+              end
+
               private
 
               def tempo_engine

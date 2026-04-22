@@ -6,19 +6,19 @@ module Legion
   module Extensions
     module Agentic
       module Homeostasis
-        module Tempo
+        module Homeostasis
           module Actor
-            class Adapt < Legion::Extensions::Actors::Every
+            class Correct < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Homeostasis::Tempo::Runners::Tempo
+                Legion::Extensions::Agentic::Homeostasis::Homeostasis::Runners::CognitiveHomeostasis
               end
 
               def runner_function
-                'run_tempo_adaptation'
+                'update_cognitive_homeostasis'
               end
 
               def time
-                60
+                30
               end
 
               def run_now?
