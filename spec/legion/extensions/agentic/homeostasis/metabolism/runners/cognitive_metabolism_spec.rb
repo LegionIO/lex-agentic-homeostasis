@@ -215,10 +215,13 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Metabolism::Runners::Co
   end
 
   describe '#run_all_cycles' do
-    it 'returns cycled and reserves counts when no reserves exist' do
+    it 'returns success: true and zero counts when no reserves exist' do
       result = client.run_all_cycles
+      expect(result[:success]).to be true
       expect(result[:cycled]).to eq(0)
       expect(result[:reserves]).to eq(0)
+      expect(result[:results]).to eq([])
+      expect(result[:failures]).to eq([])
     end
 
     it 'cycles all existing reserves' do
@@ -233,6 +236,15 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Metabolism::Runners::Co
       client.create_reserve
       result = client.run_all_cycles
       expect(result[:cycled]).to eq(result[:reserves])
+    end
+
+    it 'returns success: true with populated results and empty failures' do
+      client.create_reserve
+      result = client.run_all_cycles
+      expect(result[:success]).to be true
+      expect(result[:results]).to be_an(Array)
+      expect(result[:results].size).to eq(1)
+      expect(result[:failures]).to eq([])
     end
   end
 end

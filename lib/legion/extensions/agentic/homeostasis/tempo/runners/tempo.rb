@@ -82,7 +82,7 @@ module Legion
                   latest = tempo_engine.records[domain]&.last
                   next unless latest
 
-                  record = tempo_engine.adapt_tempo(domain: domain, target: latest.baseline_tempo)
+                  record = tempo_engine.adapt_tempo(domain: domain, target: latest.task_tempo_requirement)
                   record&.to_h
                 end
 
