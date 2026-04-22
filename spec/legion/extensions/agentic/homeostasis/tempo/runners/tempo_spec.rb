@@ -107,4 +107,30 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Tempo::Runners::Tempo d
       expect(report[:domains]).to include(:a, :b)
     end
   end
+
+  describe '#run_tempo_adaptation' do
+    it 'returns adapted and domains counts' do
+      result = client.run_tempo_adaptation
+      expect(result).to have_key(:adapted)
+      expect(result).to have_key(:domains)
+    end
+
+    it 'returns 0 adapted when no records exist' do
+      result = client.run_tempo_adaptation
+      expect(result[:adapted]).to eq(0)
+      expect(result[:domains]).to eq(0)
+    end
+
+    it 'adapts mismatched domains when records exist' do
+      client.record_tempo(domain: :code, current_tempo: 0.1, task_requirement: 0.9)
+      result = client.run_tempo_adaptation
+      expect(result[:adapted]).to be >= 1
+    end
+
+    it 'returns results array' do
+      client.record_tempo(domain: :analysis, current_tempo: 0.2, task_requirement: 0.8)
+      result = client.run_tempo_adaptation
+      expect(result[:results]).to be_a(Array)
+    end
+  end
 end

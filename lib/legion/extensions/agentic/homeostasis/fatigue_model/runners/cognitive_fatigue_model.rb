@@ -63,9 +63,13 @@ module Legion
               end
 
               def update_cognitive_fatigue_model(**)
-                result = engine.rest_all
-                log.info('[cognitive_fatigue] model updated: all channels rested')
-                result
+                depleted = engine.channels_needing_rest
+                rested_channels = depleted.map { |ch| engine.rest_channel(channel_name: ch[:name]) }
+                log.info("[cognitive_fatigue] model updated: #{depleted.size} depleted channels rested")
+                { rested: depleted.size, channels: rested_channels, overall_fatigue: engine.overall_fatigue.round(4) }
+              rescue StandardError => e
+                log.error("[cognitive_fatigue] update_cognitive_fatigue_model failed: #{e.message}")
+                { rested: 0, channels: [], error: e.message }
               end
 
               def cognitive_fatigue_model_stats(**)

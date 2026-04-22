@@ -5,14 +5,15 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 ## Overview
 
 **Gem**: `lex-agentic-homeostasis`
-**Version**: 0.1.7
+**Version**: 0.1.8
 **Namespace**: `Legion::Extensions::Agentic::Homeostasis`
 
 ## Sub-Modules
 
 | Sub-Module | Source Gem | Purpose |
 |---|---|---|
-| `Homeostasis::Homeostasis` | `lex-homeostasis` | Seven-setpoint negative feedback regulation, allostatic load |
+| `Homeostasis::Core` | `lex-homeostasis` | Core regulation engine — seven setpoints, allostatic load, negative feedback |
+| `Homeostasis::Homeostasis` | `lex-homeostasis` | Per-variable homeostatic tracking — create, perturb, correct cognitive variables |
 | `Homeostasis::FatigueModel` | `lex-cognitive-fatigue-model` | Cognitive resource depletion curves across session time |
 | `Homeostasis::Metabolism` | `lex-cognitive-metabolism` | Energy budget allocation and cognitive metabolic rate |
 | `Homeostasis::Rhythm` | `lex-cognitive-rhythm` | Circadian-like cognitive rhythm — sinusoidal oscillators, peak/low tide |
@@ -24,7 +25,6 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 | `Homeostasis::Cocoon` | `lex-cognitive-cocoon` | Protective withdrawal and recovery state |
 | `Homeostasis::FossilFuel` | `lex-cognitive-fossil-fuel` | Stored energy from past experience |
 | `Homeostasis::Hourglass` | `lex-cognitive-hourglass` | Time-based resource depletion tracking |
-| `Homeostasis::Core` | `lex-homeostasis` | Core homeostasis regulation engine — seven setpoints, allostatic load, negative feedback regulator |
 | `Homeostasis::Neuromodulation` | `lex-neuromodulation` | Dopamine/serotonin/norepinephrine/acetylcholine analogs |
 | `Homeostasis::NeuralOscillation` | `lex-neural-oscillation` | Gamma/beta/alpha/theta/delta bands, cross-frequency coupling |
 | `Homeostasis::Temporal` | `lex-temporal` | Temporal reasoning — event ordering, duration estimation |
@@ -35,12 +35,18 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 
 ## Actors
 
-- `Homeostasis::NeuralOscillation::Actors::Tick` — interval actor, advances oscillation bands
-- `Homeostasis::Neuromodulation::Actors::Drift` — interval actor, applies neuromodulator drift
-- `Homeostasis::Surplus::Actors::Replenish` — interval actor, replenishes cognitive surplus
-- `Homeostasis::Tectonics::Actors::DriftTick` — interval actor, advances tectonic drift
-- `Homeostasis::Tempo::Actors::Adapt` — interval actor, adapts processing tempo
-- `Homeostasis::Tide::Actors::TideCycle` — runs every 60s, executes `tide_maintenance`
+| Actor | Interval | What It Does |
+|-------|----------|--------------|
+| `Core::Actor::Regulate` | Every 30s | Runs negative-feedback regulation across all seven setpoints |
+| `Homeostasis::Actor::Correct` | Every 30s | Corrects all out-of-tolerance cognitive variables |
+| `FatigueModel::Actor::Update` | Every 60s | Advances fatigue depletion curve |
+| `Metabolism::Actor::Cycle` | Every 120s | Runs all metabolic cycles |
+| `Tempo::Actor::Adapt` | Every 60s | Adapts processing tempo to current load |
+| `Tide::Actors::TideCycle` | Every 60s | Executes tidal maintenance cycle |
+| `Neuromodulation::Actors::Drift` | interval | Applies neuromodulator drift |
+| `NeuralOscillation::Actors::Tick` | interval | Advances oscillation bands |
+| `Surplus::Actors::Replenish` | interval | Replenishes cognitive surplus |
+| `Tectonics::Actors::DriftTick` | interval | Advances tectonic drift |
 
 ## Installation
 

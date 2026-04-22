@@ -6,15 +6,15 @@ module Legion
   module Extensions
     module Agentic
       module Homeostasis
-        module Tempo
+        module FatigueModel
           module Actor
-            class Adapt < Legion::Extensions::Actors::Every
+            class Update < Legion::Extensions::Actors::Every
               def runner_class
-                Legion::Extensions::Agentic::Homeostasis::Tempo::Runners::Tempo
+                Legion::Extensions::Agentic::Homeostasis::FatigueModel::Runners::CognitiveFatigueModel
               end
 
               def runner_function
-                'run_tempo_adaptation'
+                'update_cognitive_fatigue_model'
               end
 
               def time

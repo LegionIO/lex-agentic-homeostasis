@@ -73,6 +73,32 @@ module Legion
                 { success: false, error: e.message }
               end
 
+              def run_all_cycles(**)
+                reserves = engine.all_reserves
+                if reserves.empty?
+                  log.info('[cognitive_metabolism] run_all_cycles: no reserves to cycle')
+                  return { success: true, cycled: 0, reserves: 0, results: [], failures: [] }
+                end
+
+                results  = []
+                failures = []
+
+                reserves.each_key do |id|
+                  result = engine.run_cycle(reserve_id: id, operations: [])
+                  log.debug("[cognitive_metabolism] auto-cycle: reserve=#{id} state=#{result[:reserve_state]}")
+                  results << result
+                rescue StandardError => e
+                  log.error("[cognitive_metabolism] auto-cycle failed for reserve=#{id}: #{e.message}")
+                  failures << { reserve_id: id, error: e.message }
+                end
+
+                log.info("[cognitive_metabolism] run_all_cycles: #{results.size}/#{reserves.size} reserves cycled")
+                { success: failures.empty?, cycled: results.size, reserves: reserves.size, results: results, failures: failures }
+              rescue StandardError => e
+                log.error("[cognitive_metabolism] run_all_cycles failed: #{e.message}")
+                { success: false, cycled: 0, reserves: 0, results: [], failures: [], error: e.message }
+              end
+
               private
 
               def engine
