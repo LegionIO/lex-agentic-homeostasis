@@ -10,8 +10,9 @@ module Legion
               ORE_TYPES   = %i[experience observation hypothesis data intuition].freeze
               ALLOY_TYPES = %i[insight wisdom expertise synthesis theory].freeze
 
-              MAX_ORES      = 500
-              MAX_CRUCIBLES = 50
+              MAX_ORES         = 500
+              MAX_CRUCIBLES    = 50
+              MAX_ALLOY_HISTORY = 500
 
               HEAT_RATE  = 0.1
               COOL_RATE  = 0.05

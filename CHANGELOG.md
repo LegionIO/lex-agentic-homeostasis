@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.9] - 2026-06-01
+### Fixed
+- HomeostasisEngine#prune_if_needed now removes the worst variable (min_by) instead of the best (max_by) — system was discarding healthiest variables and keeping the worst
+- AllostaticLoad#reset now resets @peak_load alongside @load, preventing stale peak values after recovery
+- FurnaceEngine#smelt now caps @alloy_history at MAX_ALLOY_HISTORY (500), preventing unbounded memory growth
+
 ## [0.1.8] - 2026-04-22
 ### Fixed
 - Tempo Adapt actor now calls `run_tempo_adaptation` instead of read-only `tempo_report`

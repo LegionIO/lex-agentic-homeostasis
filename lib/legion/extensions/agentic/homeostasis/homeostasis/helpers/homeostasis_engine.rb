@@ -135,8 +135,8 @@ module Legion
               def prune_if_needed
                 return if @variables.size < MAX_VARIABLES
 
-                best = @variables.values.max_by(&:balance_score)
-                @variables.delete(best.id) if best
+                worst = @variables.values.min_by(&:balance_score)
+                @variables.delete(worst.id) if worst
               end
             end
           end

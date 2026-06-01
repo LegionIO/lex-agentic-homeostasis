@@ -69,6 +69,7 @@ module Legion
 
               def reset
                 @load = 0.0
+                @peak_load = 0.0
                 @history.clear
               end
 
