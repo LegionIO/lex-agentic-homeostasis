@@ -7,6 +7,8 @@ module Legion
         module Furnace
           module Helpers
             class FurnaceEngine
+              include Constants
+
               attr_reader :ores, :crucibles, :alloy_history
 
               def initialize
@@ -94,6 +96,7 @@ module Legion
                 result = crucible.smelt!(@ores, alloy_type: alloy_type)
                 if result[:smelted]
                   @alloy_history << result[:alloy]
+                  @alloy_history.shift while @alloy_history.size > MAX_ALLOY_HISTORY
                   remove_smelted_ores!(result.dig(:alloy, :source_ore_ids) || [])
                 end
                 result.merge(crucible_id: crucible_id)
