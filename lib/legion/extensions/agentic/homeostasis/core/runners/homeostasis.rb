@@ -12,11 +12,14 @@ module Legion
 
               def regulate(tick_results: {}, **)
                 observations = extract_observations(tick_results)
-                signals = regulator.regulate(observations)
-                allostatic_load.update(regulator)
+                signals = {}
+                unless observations.empty?
+                  signals = regulator.regulate(observations)
+                  allostatic_load.update(regulator)
 
-                # Adapt setpoints slowly when system is stable
-                regulator.adapt_setpoints if allostatic_load.classification == :healthy
+                  # Adapt setpoints slowly when system is stable
+                  regulator.adapt_setpoints if allostatic_load.classification == :healthy
+                end
 
                 log.debug("[homeostasis] regulated #{signals.size} subsystems, " \
                           "health=#{regulator.regulation_health.round(2)}, " \
@@ -123,7 +126,7 @@ module Legion
                 budget = tick_results[:budget]
                 return nil unless elapsed.is_a?(Numeric) && budget.is_a?(Numeric) && budget.positive?
 
-                (elapsed / budget).clamp(0.0, 1.0)
+                (elapsed.to_f / budget).clamp(0.0, 1.0)
               end
 
               def extract_memory_health(tick_results)

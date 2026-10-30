@@ -58,6 +58,28 @@ RSpec.describe Legion::Extensions::Agentic::Homeostasis::Core::Runners::Homeosta
       expect(result[:signals]).to be_empty
     end
 
+    it 'does not replay stale regulation or clear modulation when no observations arrive' do
+      client.regulate(tick_results: { emotional_evaluation: { arousal: 1.0 } })
+      before = client.regulation_overview
+      modulation = client.modulation_for(subsystem: :emotional_arousal)
+
+      3.times do
+        result = client.regulate(tick_results: {})
+        expect(result[:signals]).to be_empty
+        expect(result[:subsystems_regulated]).to eq(0)
+      end
+
+      expect(client.regulation_overview).to eq(before)
+      expect(client.modulation_for(subsystem: :emotional_arousal)).to eq(modulation)
+    end
+
+    it 'calculates fractional cognitive load from integer timing measurements' do
+      result = client.regulate(tick_results: { elapsed: 9, budget: 10 })
+
+      expect(result[:signals][:cognitive_load][:type]).to eq(:dampen)
+      expect(client.modulation_for(subsystem: :cognitive_load)[:setpoint][:current_value]).to eq(0.9)
+    end
+
     it 'accumulates allostatic load over repeated regulation' do
       3.times { client.regulate(tick_results: tick_results) }
       result = client.regulate(tick_results: tick_results)
