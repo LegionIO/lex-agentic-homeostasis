@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Legion::Extensions::Agentic::Homeostasis::Tectonics::Runners::CognitiveTectonics do
-  let(:engine)  { Legion::Extensions::Agentic::Homeostasis::Tectonics::Helpers::TectonicEngine.new }
-  let(:runner)  { Object.new.extend(described_module) }
+  let(:engine) { Legion::Extensions::Agentic::Homeostasis::Tectonics::Helpers::TectonicEngine.new }
+  let(:runner) { Object.new.extend(described_module) }
 
   let(:plate_a_id) do
     engine.create_plate(domain: :ethics, content: 'Honesty is paramount',

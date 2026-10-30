@@ -5,7 +5,7 @@ Domain consolidation gem for homeostasis, self-regulation, and internal state ma
 ## Overview
 
 **Gem**: `lex-agentic-homeostasis`
-**Version**: 0.1.8
+**Version**: 0.1.10
 **Namespace**: `Legion::Extensions::Agentic::Homeostasis`
 
 ## Sub-Modules

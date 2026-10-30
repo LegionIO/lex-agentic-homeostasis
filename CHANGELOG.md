@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.1.10] - 2026-10-29
+### Fixed
+- Preserve homeostatic state and the last valid modulation during observation-free maintenance instead of replaying stale observations.
+- Use fractional division for integer elapsed/budget measurements so high cognitive load produces the correct regulation signal.
+
 ## [0.1.9] - 2026-06-01
 ### Fixed
 - HomeostasisEngine#prune_if_needed now removes the worst variable (min_by) instead of the best (max_by) — system was discarding healthiest variables and keeping the worst
